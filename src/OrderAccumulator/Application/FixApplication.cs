@@ -4,16 +4,15 @@ using QuickFix.FIX44;
 
 namespace OrderAccumulator.Application;
 
-public class FixApplication : MessageCracker, IApplication
+/// <summary>
+/// Implements the QuickFIX/n IApplication interface.
+/// Entry point for all FIX messages received by the Accumulator.
+/// Inherits MessageCracker for automatic dispatch by message type.
+/// </summary>
+public class FixApplication(ExposureService exposureService, ILogger<FixApplication> logger) : MessageCracker, IApplication
 {
-    private readonly ExposureService _exposureService;
-    private readonly ILogger<FixApplication> _logger;
-
-    public FixApplication(ExposureService exposureService, ILogger<FixApplication> logger)
-    {
-        _exposureService = exposureService;
-        _logger = logger;
-    }
+    private readonly ExposureService _exposureService = exposureService;
+    private readonly ILogger<FixApplication> _logger = logger;
 
     public void FromApp(QuickFix.Message msg, SessionID sessionID)
         => Crack(msg, sessionID);
@@ -31,6 +30,10 @@ public class FixApplication : MessageCracker, IApplication
     public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToApp(QuickFix.Message msg, SessionID sessionID) { }
 
+    /// <summary>
+    /// Invoked by MessageCracker when a NewOrderSingle (35=D) is received.
+    /// Extracts order fields, updates exposure, and replies with an ExecutionReport.
+    /// </summary>
     public void OnMessage(NewOrderSingle order, SessionID sessionID)
     {
         var symbol = order.Symbol.Value;
@@ -43,6 +46,11 @@ public class FixApplication : MessageCracker, IApplication
         SendExecutionReport(order, sessionID);
     }
 
+    /// <summary>
+    /// Builds and sends a FIX ExecutionReport (35=8) back to the Generator
+    /// as a full fill response to the received NewOrderSingle.
+    /// Uses ClOrdID for request/response correlation on the Generator side.
+    /// </summary>
     private void SendExecutionReport(NewOrderSingle order, SessionID sessionID)
     {
         var report = ExecutionReportMapper.ToFill(order);
