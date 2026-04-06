@@ -11,20 +11,17 @@ namespace OrderAccumulator.Application;
 /// </summary>
 public class FixApplication(ExposureService exposureService, ILogger<FixApplication> logger) : MessageCracker, IApplication
 {
-    private readonly ExposureService _exposureService = exposureService;
-    private readonly ILogger<FixApplication> _logger = logger;
-
     public void FromApp(QuickFix.Message msg, SessionID sessionID)
         => Crack(msg, sessionID);
 
     public void OnCreate(SessionID sessionID)
-        => _logger.LogInformation("Session created: {SessionID}", sessionID);
+        => logger.LogInformation("Session created: {SessionID}", sessionID);
 
     public void OnLogon(SessionID sessionID)
-        => _logger.LogInformation("Logon: {SessionID}", sessionID);
+        => logger.LogInformation("Logon: {SessionID}", sessionID);
 
     public void OnLogout(SessionID sessionID)
-        => _logger.LogInformation("Logout: {SessionID}", sessionID);
+        => logger.LogInformation("Logout: {SessionID}", sessionID);
 
     public void FromAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
@@ -41,7 +38,7 @@ public class FixApplication(ExposureService exposureService, ILogger<FixApplicat
         var price = order.Price.Value;
         var quantity = order.OrderQty.Value;
 
-        _exposureService.Apply(symbol, side, (decimal)price, (decimal)quantity);
+        exposureService.Apply(symbol, side, (decimal)price, (decimal)quantity);
 
         SendExecutionReport(order, sessionID);
     }
@@ -56,7 +53,7 @@ public class FixApplication(ExposureService exposureService, ILogger<FixApplicat
         var report = ExecutionReportMapper.ToFill(order);
         Session.SendToTarget(report, sessionID);
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "ExecutionReport sent: {ClOrdID} {Symbol} {Side} {Qty}@{Price}",
             order.ClOrdID.Value,
             order.Symbol.Value,

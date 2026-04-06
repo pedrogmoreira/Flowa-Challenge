@@ -9,7 +9,6 @@ namespace OrderAccumulator.Application;
 public class ExposureService(ILogger<ExposureService> logger)
 {
     private readonly ConcurrentDictionary<string, decimal> _exposure = new();
-    private readonly ILogger<ExposureService> _logger = logger;
 
     /// <summary>
     /// Applies the financial impact of an executed order to the symbol's exposure.
@@ -28,7 +27,7 @@ public class ExposureService(ILogger<ExposureService> logger)
             (_, current) => side == '1' ? current + notional : current - notional
         );
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "Exposure updated: {Symbol} = {Exposure}",
             symbol,
             _exposure[symbol]

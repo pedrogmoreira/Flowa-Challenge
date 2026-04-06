@@ -10,9 +10,6 @@ public class AccumulatorWorker(
     FixApplication fixApplication,
     ILogger<AccumulatorWorker> logger) : BackgroundService
 {
-    private readonly IConfiguration _configuration = configuration;
-    private readonly FixApplication _fixApplication = fixApplication;
-    private readonly ILogger<AccumulatorWorker> _logger = logger;
     private ThreadedSocketAcceptor? _acceptor;
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -23,20 +20,20 @@ public class AccumulatorWorker(
         var logFactory = new ScreenLogFactory(settings);
 
         _acceptor = new ThreadedSocketAcceptor(
-            _fixApplication,
+            fixApplication,
             storeFactory,
             settings,
             logFactory
         );
 
         _acceptor.Start();
-        _logger.LogInformation("FIX Acceptor started on port {Port}",
-            _configuration["QuickFix:SocketAcceptPort"]);
+        logger.LogInformation("FIX Acceptor started on port {Port}",
+            configuration["QuickFix:SocketAcceptPort"]);
 
         stoppingToken.Register(() =>
         {
             _acceptor.Stop();
-            _logger.LogInformation("FIX Acceptor stopped");
+            logger.LogInformation("FIX Acceptor stopped");
         });
 
         return Task.CompletedTask;
@@ -44,7 +41,7 @@ public class AccumulatorWorker(
 
     private SessionSettings BuildSessionSettings()
     {
-        var path = _configuration["QuickFix:ConfigPath"] ?? "fix-configs/acceptor.cfg";
+        var path = configuration["QuickFix:ConfigPath"] ?? "fix-configs/acceptor.cfg";
         return new SessionSettings(path);
     }
 }
