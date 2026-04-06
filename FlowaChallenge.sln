@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderAccumulator", "src\Ord
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderGenerator.Api", "src\OrderGenerator.Api\OrderGenerator.Api.csproj", "{7CA062BD-C9F5-4CA3-AF00-FEDF663A4539}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fix-configs", "fix-configs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		acceptor.cfg = acceptor.cfg
+		initiator.cfg = initiator.cfg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,5 +56,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3D6A94E8-172E-423F-8F25-07627798BEC1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{7CA062BD-C9F5-4CA3-AF00-FEDF663A4539} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {11AB58B1-C7E5-4E6E-8DD8-5D735DC55082}
 	EndGlobalSection
 EndGlobal
