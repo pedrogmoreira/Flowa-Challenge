@@ -17,7 +17,7 @@ public class ExposureService(ILogger<ExposureService> logger)
     /// <param name="side">Order side: '1' = Buy, '2' = Sell (FIX tag 54)</param>
     /// <param name="price">Execution price (FIX tag 44)</param>
     /// <param name="quantity">Executed quantity (FIX tag 38)</param>
-    public void Apply(string symbol, char side, decimal price, decimal quantity)
+    public virtual void Apply(string symbol, char side, decimal price, decimal quantity)
     {
         var notional = price * quantity;
 

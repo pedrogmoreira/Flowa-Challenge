@@ -14,7 +14,7 @@ namespace OrderGenerator.Api.Application;
 /// Manages the FIX initiator lifecycle and handles request/response correlation
 /// between HTTP requests and asynchronous FIX ExecutionReport callbacks.
 /// </summary>
-public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitiatorService> logger) : MessageCracker, IApplication, IHostedService
+public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitiatorService> logger) : MessageCracker, IApplication, IHostedService, IFixInitiatorService
 {
     private readonly ConcurrentDictionary<string, TaskCompletionSource<OrderResponse>> _pending = new();
     private SocketInitiator? _initiator;

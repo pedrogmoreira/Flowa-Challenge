@@ -6,7 +6,7 @@ namespace OrderGenerator.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController(FixInitiatorService fixInitiatorService, ILogger<OrdersController> logger) : ControllerBase
+public class OrdersController(IFixInitiatorService fixInitiatorService, ILogger<OrdersController> logger) : ControllerBase
 {
 
     /// <summary>
