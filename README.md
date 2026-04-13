@@ -1,5 +1,10 @@
 # Flowa Challenge
 
+![CI](https://github.com/pedrogmoreira/Flowa-Challenge/actions/workflows/ci.yml/badge.svg)
+[![Maintainability](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge/maintainability.svg)](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge)
+[![Code Coverage](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge/coverage.svg)](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge)
+
+
 A microservices-based order management system using FIX 4.4 protocol for inter-service communication.
 
 ## Technologies
@@ -12,8 +17,11 @@ A microservices-based order management system using FIX 4.4 protocol for inter-s
 
 ## Architecture
 
-```
-Browser → React Frontend (3000) → OrderGenerator.Api (8080) → FIX 4.4/TCP → OrderAccumulator (5001)
+```mermaid
+graph LR
+    A[Browser] --> B[Frontend :3000]
+    B --> C[OrderGenerator.Api :8080]
+    C -->|FIX 4.4/TCP| D[OrderAccumulator :5001]
 ```
 
 ### Services
