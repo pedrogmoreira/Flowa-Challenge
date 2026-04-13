@@ -28,4 +28,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY fix-configs/initiator.cfg fix-configs/initiator.cfg
+COPY fix-configs/FIX44.xml FIX44.xml
 ENTRYPOINT ["dotnet", "OrderGenerator.Api.dll"]

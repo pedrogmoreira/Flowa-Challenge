@@ -26,4 +26,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY fix-configs/acceptor.cfg fix-configs/acceptor.cfg
+COPY fix-configs/FIX44.xml FIX44.xml
 ENTRYPOINT ["dotnet", "OrderAccumulator.dll"]

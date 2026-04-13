@@ -7,7 +7,7 @@ namespace OrderAccumulator.Worker;
 
 public class AccumulatorWorker(
     IConfiguration configuration,
-    FixApplication fixApplication,
+    FixAcceptorApplication fixApplication,
     ILogger<AccumulatorWorker> logger) : BackgroundService
 {
     private ThreadedSocketAcceptor? _acceptor;

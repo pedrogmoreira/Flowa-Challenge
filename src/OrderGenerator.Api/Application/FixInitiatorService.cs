@@ -78,7 +78,7 @@ public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitia
     /// Invoked by MessageCracker when an ExecutionReport (35=8) is received.
     /// Resolves the pending TaskCompletionSource for the matching ClOrdID.
     /// </summary>
-    public void OnMessage(ExecutionReport report)
+    public void OnMessage(ExecutionReport report, SessionID sessionID)
     {
         var clOrdID = report.ClOrdID.Value;
 
@@ -112,7 +112,6 @@ public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitia
 
     public void OnLogout(SessionID sessionID)
         => logger.LogInformation("Logout: {SessionID}", sessionID);
-
     public void FromAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToApp(QuickFix.Message msg, SessionID sessionID) { }

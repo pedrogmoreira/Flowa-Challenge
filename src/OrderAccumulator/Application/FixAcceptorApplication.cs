@@ -9,24 +9,8 @@ namespace OrderAccumulator.Application;
 /// Entry point for all FIX messages received by the Accumulator.
 /// Inherits MessageCracker for automatic dispatch by message type.
 /// </summary>
-public class FixApplication(ExposureService exposureService, ILogger<FixApplication> logger) : MessageCracker, IApplication
+public class FixAcceptorApplication(ExposureService exposureService, ILogger<FixAcceptorApplication> logger) : MessageCracker, IApplication
 {
-    public void FromApp(QuickFix.Message msg, SessionID sessionID)
-        => Crack(msg, sessionID);
-
-    public void OnCreate(SessionID sessionID)
-        => logger.LogInformation("Session created: {SessionID}", sessionID);
-
-    public void OnLogon(SessionID sessionID)
-        => logger.LogInformation("Logon: {SessionID}", sessionID);
-
-    public void OnLogout(SessionID sessionID)
-        => logger.LogInformation("Logout: {SessionID}", sessionID);
-
-    public void FromAdmin(QuickFix.Message msg, SessionID sessionID) { }
-    public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
-    public void ToApp(QuickFix.Message msg, SessionID sessionID) { }
-
     /// <summary>
     /// Invoked by MessageCracker when a NewOrderSingle (35=D) is received.
     /// Extracts order fields, updates exposure, and replies with an ExecutionReport.
@@ -62,4 +46,14 @@ public class FixApplication(ExposureService exposureService, ILogger<FixApplicat
             order.Price.Value
         );
     }
+
+    public void FromApp(QuickFix.Message msg, SessionID sessionID)
+        => Crack(msg, sessionID);
+
+    public void OnCreate(SessionID sessionID) { }
+    public void OnLogon(SessionID sessionID) { }
+    public void OnLogout(SessionID sessionID) { }
+    public void FromAdmin(QuickFix.Message msg, SessionID sessionID) { }
+    public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
+    public void ToApp(QuickFix.Message msg, SessionID sessionID) { }
 }
