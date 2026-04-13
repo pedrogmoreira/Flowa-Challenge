@@ -2,6 +2,14 @@
 
 A microservices-based order management system using FIX 4.4 protocol for inter-service communication.
 
+## Technologies
+
+- C# / ASP.NET Core 9
+- QuickFIX/n 1.14.0 (FIX 4.4 protocol)
+- React 18 + Vite
+- Nginx
+- Docker + Docker Compose
+
 ## Architecture
 
 ```
@@ -46,7 +54,7 @@ Exposure = Σ(price × qty) buys - Σ(price × qty) sells
 
 Buy orders increase exposure, sell orders decrease it.
 
-## Running Locally
+## How to install and run
 
 ### Prerequisites
 
@@ -93,6 +101,62 @@ Access the frontend at `http://localhost:5173`.
 | Quantity | Positive integer, less than 100,000 |
 | Price | Positive decimal, multiple of 0.01, less than 1,000 |
 
+## Tests
+
+### Unit Tests
+
+**OrderAccumulator.Tests**
+
+| Test | Description |
+|---|---|
+| `Apply_BuyOrder_IncreasesExposure` | Buy order correctly increases symbol exposure |
+| `Apply_SellOrder_DecreasesExposure` | Sell order correctly decreases symbol exposure |
+| `Apply_BuyThenSell_CalculatesNetExposure` | Net exposure is calculated correctly after buy and sell |
+| `Apply_MultipleSymbols_TracksExposureIndependently` | Each symbol tracks its own exposure independently |
+| `GetExposure_UnknownSymbol_ReturnsZero` | Unknown symbol returns zero exposure |
+
+**OrderGenerator.Api.Tests**
+
+| Test | Description |
+|---|---|
+| `ToNewOrderSingle_BuyOrder_SetsSideCorrectly` | Buy order maps to FIX Side.BUY correctly |
+| `ToNewOrderSingle_SellOrder_SetsSideCorrectly` | Sell order maps to FIX Side.SELL correctly |
+| `ToNewOrderSingle_SetsSymbolCorrectly` | Symbol is mapped correctly to FIX tag 55 |
+| `ToNewOrderSingle_GeneratesUniqueClOrdIDs` | Each order generates a unique ClOrdID for FIX correlation |
+| `ToNewOrderSingle_SetsQuantityAndPriceCorrectly` | Quantity and price are mapped correctly to FIX tags 38 and 44 |
+
+### Running Unit Tests
+
+```bash
+dotnet test
+```
+
+### E2E Tests (Cypress)
+
+**OrderGenerator.Frontend**
+
+| Test | Description |
+|---|---|
+| `should display the order form` | All form fields and submit button are visible |
+| `should submit a valid order and display execution result` | Full happy path: order submitted and ExecutionReport displayed |
+| `should block submission with empty quantity` | HTML5 validation blocks submission without quantity |
+| `should block submission with empty price` | HTML5 validation blocks submission without price |
+
+### Running E2E Tests
+
+Make sure all services are running:
+
+```bash
+docker compose up
+```
+
+Run Cypress pointing to the frontend container:
+
+```bash
+cd src/OrderGenerator.Frontend
+npx cypress run --config baseUrl=http://localhost:3000
+```
+
 ## Architectural Decisions
 
 ### FIX 4.4 for inter-service communication
@@ -106,16 +170,6 @@ All financial calculations use `decimal` to avoid binary floating-point precisio
 
 ### Central Package Management
 NuGet package versions are managed centrally via `Directory.Packages.props`, ensuring version consistency across all projects.
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Backend | C# / ASP.NET Core 9 / Worker Service |
-| FIX Protocol | QuickFIX/n 1.14.0 |
-| Frontend | React 18 + Vite |
-| Containerization | Docker + Docker Compose |
-| CI/CD | GitLab CI (SAST + Secret Detection) |
 
 ---
 
