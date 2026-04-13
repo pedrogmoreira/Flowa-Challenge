@@ -33,4 +33,7 @@ public class ExposureService(ILogger<ExposureService> logger)
             _exposure[symbol]
         );
     }
+
+    public decimal GetExposure(string symbol)
+        => _exposure.TryGetValue(symbol, out var value) ? value : 0m;
 }
