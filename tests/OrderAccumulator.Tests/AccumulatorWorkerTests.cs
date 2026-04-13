@@ -11,7 +11,6 @@ public class AccumulatorWorkerTests
     {
         var acceptorMock = new Mock<ISocketAcceptorWrapper>();
         var worker = new AccumulatorWorker(
-            null!,
             acceptorMock.Object,
             NullLogger<AccumulatorWorker>.Instance
         );
@@ -26,7 +25,6 @@ public class AccumulatorWorkerTests
     {
         var acceptorMock = new Mock<ISocketAcceptorWrapper>();
         var worker = new AccumulatorWorker(
-            null!,
             acceptorMock.Object,
             NullLogger<AccumulatorWorker>.Instance
         );
