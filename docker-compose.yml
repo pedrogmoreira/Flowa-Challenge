@@ -1,0 +1,20 @@
+services:
+  accumulator:
+    build:
+      context: .
+      dockerfile: src/OrderAccumulator/Dockerfile
+    container_name: accumulator
+    ports:
+      - "5001:5001"
+
+  generator:
+    build:
+      context: .
+      dockerfile: src/OrderGenerator.Api/Dockerfile
+    container_name: generator
+    ports:
+      - "8080:8080"
+    depends_on:
+      - accumulator
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
