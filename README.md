@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/pedrogmoreira/Flowa-Challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/pedrogmoreira/Flowa-Challenge/actions/workflows/ci.yml)
 [![Maintainability](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge/maintainability.svg)](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge)
-[![Code Coverage](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge/coverage.png)](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge)
+[![Code Coverage](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge/coverage.svg)](https://qlty.sh/gh/pedrogmoreira/projects/Flowa-Challenge)
 
 
 A microservices-based order management system using FIX 4.4 protocol for inter-service communication.
