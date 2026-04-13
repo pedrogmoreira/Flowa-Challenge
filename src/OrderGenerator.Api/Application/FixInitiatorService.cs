@@ -1,10 +1,8 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using QuickFix;
 using QuickFix.FIX44;
 using QuickFix.Fields;
-using QuickFix.Logger;
-using QuickFix.Store;
-using QuickFix.Transport;
+using OrderGenerator.Api.Infrastructure;
 using OrderGenerator.Api.Models;
 using OrderGenerator.Api.Mappers;
 
@@ -14,27 +12,21 @@ namespace OrderGenerator.Api.Application;
 /// Manages the FIX initiator lifecycle and handles request/response correlation
 /// between HTTP requests and asynchronous FIX ExecutionReport callbacks.
 /// </summary>
-public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitiatorService> logger) : MessageCracker, IApplication, IHostedService, IFixInitiatorService
+public class FixInitiatorService(ISocketInitiatorWrapper wrapper, ILogger<FixInitiatorService> logger)
+    : MessageCracker, IApplication, IHostedService, IFixInitiatorService
 {
-    private readonly ConcurrentDictionary<string, TaskCompletionSource<OrderResponse>> _pending = new();
-    private SocketInitiator? _initiator;
+    internal readonly ConcurrentDictionary<string, TaskCompletionSource<OrderResponse>> _pending = new();
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        var settings = BuildSessionSettings();
-        var storeFactory = new MemoryStoreFactory();
-        var logFactory = new ScreenLogFactory(settings);
-
-        _initiator = new SocketInitiator(this, storeFactory, settings, logFactory);
-        _initiator.Start();
-
+        wrapper.Start(this);
         logger.LogInformation("FIX Initiator started");
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _initiator?.Stop();
+        wrapper.Stop();
         logger.LogInformation("FIX Initiator stopped");
         return Task.CompletedTask;
     }
@@ -112,19 +104,10 @@ public class FixInitiatorService(IConfiguration configuration, ILogger<FixInitia
 
     public void OnLogout(SessionID sessionID)
         => logger.LogInformation("Logout: {SessionID}", sessionID);
+
     public void FromAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToAdmin(QuickFix.Message msg, SessionID sessionID) { }
     public void ToApp(QuickFix.Message msg, SessionID sessionID) { }
 
-    private SessionSettings BuildSessionSettings()
-    {
-        var path = configuration["QuickFix:ConfigPath"] ?? "fix-configs/initiator.cfg";
-        return new SessionSettings(path);
-    }
-
-    private SessionID GetSessionID()
-    {
-        var sessions = _initiator!.GetSessionIDs();
-        return sessions.First();
-    }
+    private SessionID GetSessionID() => wrapper.GetSessionIDs().First();
 }

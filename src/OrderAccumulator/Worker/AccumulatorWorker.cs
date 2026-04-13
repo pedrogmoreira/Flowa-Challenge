@@ -1,4 +1,4 @@
-﻿using OrderAccumulator.Worker;
+﻿using OrderAccumulator.Infrastructure;
 
 namespace OrderAccumulator.Worker;
 

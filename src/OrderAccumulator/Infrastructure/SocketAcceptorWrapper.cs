@@ -4,7 +4,7 @@ using QuickFix.Store;
 using QuickFix.Transport;
 using OrderAccumulator.Application;
 
-namespace OrderAccumulator.Worker;
+namespace OrderAccumulator.Infrastructure;
 
 public class SocketAcceptorWrapper : ISocketAcceptorWrapper
 {

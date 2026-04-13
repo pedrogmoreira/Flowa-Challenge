@@ -56,4 +56,13 @@ public class ExposureServiceTests
         var exposure = _sut.GetExposure("VIIA4");
         Assert.Equal(0m, exposure);
     }
+
+    [Fact]
+    public void Apply_SellThenBuy_CalculatesNetExposure()
+    {
+        _sut.Apply("PETR4", '2', 10.50m, 100m);
+        _sut.Apply("PETR4", '1', 10.50m, 50m);
+
+        Assert.Equal(-525.00m, _sut.GetExposure("PETR4"));
+    }
 }

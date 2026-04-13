@@ -1,4 +1,4 @@
-namespace OrderAccumulator.Worker;
+namespace OrderAccumulator.Infrastructure;
 
 public interface ISocketAcceptorWrapper
 {

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using OrderAccumulator.Worker;
+using OrderAccumulator.Infrastructure;
 
 namespace OrderAccumulator.Tests;
 

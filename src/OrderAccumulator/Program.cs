@@ -1,5 +1,6 @@
 using OrderAccumulator.Application;
 using OrderAccumulator.Worker;
+using OrderAccumulator.Infrastructure;
 
 var builder = Host.CreateApplicationBuilder(args);
 
